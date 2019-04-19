@@ -2,6 +2,8 @@
 create database CetDecoded;
 use CetDecoded;
 
+----------------------------------------------------------------------------------------
+
 create table User
 (
 	id INT primary key auto_increment not null,
@@ -38,6 +40,8 @@ create table Question_set_Question
     references Question(id)
 );
 
+----------------------------------------------------------------------------------------
+
 insert into user(email_id, password, role) values('abhishek@pqr.com', 'pqrs', 1);
 insert into user(email_id, password, role) values('vinay@pqr.com', 'pqrs', 1);
 insert into user(email_id, password, role) values('aditya@pqr.com', 'pqrs', 1);
@@ -45,3 +49,17 @@ insert into user(email_id, password) values('user1@pqr.com', 'pqrs');
 insert into user(email_id, password) values('user2@pqr.com', 'pqrs');
 insert into user(email_id, password) values('user3@pqr.com', 'pqrs');
 insert into user(email_id, password) values('user4@pqr.com', 'pqrs');
+
+----------------------------------------------------------------------------------------
+
+-- stored procs
+
+-- gets user using his email id
+DELIMITER $$
+create procedure GET_USER(in p_email_id varchar(50))
+begin
+	Select * from User where email_id=p_email_id;
+end$$
+DELIMITER ;
+
+Call GET_USER('abhishek@pqr.com');
