@@ -41,6 +41,14 @@ public abstract class DAO<T>
         return simpleJdbcCall.execute(parameterMap);
     }
 
+    public void executeStoredProc(String storedProcName, Map<String, ?> parameterMap) throws SQLException
+    {
+        // create new SimpleJdbcCall object for every stored-proc call to avoid metadata-cache clash issues among stored procs
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
+        simpleJdbcCall.setProcedureName(storedProcName);
+        simpleJdbcCall.execute(parameterMap);
+    }
+
     public List<T> mapToList(Map<String, Object> resultMap) throws SQLException
     {
         List<T> resultList = new ArrayList<>();

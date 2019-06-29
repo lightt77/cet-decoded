@@ -2,40 +2,28 @@ package com.abhishek.cetdecoded.models;
 
 public class User
 {
-    private String emailId;
+    private String userName;
     private String password;
-    private int role;       // TODO: make this an enum
 
     public User()
     {
 
     }
 
-    public User(String emailId, String password, int role)
+    public User(String userName, String password)
     {
-        this.emailId = emailId;
+        this.userName = userName;
         this.password = password;
-        this.role = role;
     }
 
-    public int getRole()
+    public String getUserName()
     {
-        return role;
+        return userName;
     }
 
-    public void setRole(int role)
+    public void setUserName(String userName)
     {
-        this.role = role;
-    }
-
-    public String getEmailId()
-    {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId)
-    {
-        this.emailId = emailId;
+        this.userName = userName;
     }
 
     public String getPassword()

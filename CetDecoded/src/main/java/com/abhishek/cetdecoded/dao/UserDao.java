@@ -24,4 +24,16 @@ public class UserDao extends DAO<User>
                 new UserMapper()
         ));
     }
+
+    public void addUser(User user) throws SQLException
+    {
+        executeStoredProc(StoredProcedures.ADD_USER.getValue(),
+                new HashMap<>()
+                {
+                    {
+                        put("p_user_name", user.getUserName());
+                        put("p_password", user.getPassword());
+                    }
+                });
+    }
 }
