@@ -1,13 +1,12 @@
 package com.abhishek.cetdecoded.dao;
 
 import com.abhishek.cetdecoded.utilities.Constants;
-import com.abhishek.cetdecoded.utilities.PropertiesFileReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,11 @@ public abstract class DAO<T>
 {
     private JdbcTemplate jdbcTemplate;
 
-    public DAO()
+    public DAO(@Autowired DriverManagerDataSource dataSource)
     {
-        this.jdbcTemplate = new JdbcTemplate(getDataSource());
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    // TODO: create a singleton bean instead of this
-    private DataSource getDataSource()
-    {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(PropertiesFileReader.getProperty("databaseUrl"));
-        dataSource.setUsername(PropertiesFileReader.getProperty("databaseUserName"));
-        dataSource.setPassword(PropertiesFileReader.getProperty("databasePassword"));
-        return dataSource;
-    }
 
     public Map<String, Object> executeStoredProc(String storedProcName, Map<String, ?> parameterMap, RowMapper<T> rowMapper)
     {
