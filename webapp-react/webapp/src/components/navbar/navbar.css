@@ -1,3 +1,7 @@
 #navbarBrandName {
   margin-right: 20rem;
 }
+
+.nav-link {
+  font-size: 1rem;
+}
