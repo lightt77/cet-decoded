@@ -69,3 +69,15 @@ insert into Section(section_name)
 values('Vocab');
 
 select * from Section;
+
+
+------------------------------------------------------------------------------------------------------------------------
+-- STORED PROCS
+------------------------------------------------------------------------------------------------------------------------
+ 
+DELIMITER $$
+create procedure GET_ALL_SECTIONS()
+begin
+	select * from Section;
+end$$
+DELIMITER ;
