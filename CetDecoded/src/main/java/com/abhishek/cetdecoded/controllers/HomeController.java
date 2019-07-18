@@ -1,5 +1,8 @@
 package com.abhishek.cetdecoded.controllers;
 
+import com.abhishek.cetdecoded.models.Section;
+import com.abhishek.cetdecoded.services.SectionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,15 +14,23 @@ import java.util.List;
 @CrossOrigin("*")
 public class HomeController
 {
-    @GetMapping
-    public List<String> getSections()
+    @Autowired
+    private SectionService sectionService;
+
+    @GetMapping("sections")
+    public List<Section> getSections()
+    {
+        return sectionService.getSections();
+    }
+
+    private List<Section> getMockedSectionsList()
     {
         return new ArrayList<>()
         {
             {
-                add("LR");
-                add("Quants");
-                add("Verbal");
+                add(new Section(){{setSectionName("LR");}});
+                add(new Section(){{setSectionName("Quants");}});
+                add(new Section(){{setSectionName("Verbal");}});
             }
         };
     }
