@@ -141,3 +141,10 @@ begin
 	select * from Prose where find_in_set(id, p_prose_id_set);
 end$$
 DELIMITER ;
+
+DELIMITER $$
+create procedure GET_NUMBER_OF_EXERCISES(in p_subsection_name varchar(50))
+begin
+	select count(distinct exercise_number) from Question where subsection_id = (Select id from Subsection where subsection_name = p_subsection_name);
+end$$
+DELIMITER ;

@@ -22,6 +22,11 @@ public class ExerciseService
     @Autowired
     private ProseDao proseDao;
 
+    public long getNumberOfExercises(String subsectionName)
+    {
+        return questionsDao.getNumberOfExercises(subsectionName);
+    }
+
     public ExerciseInfoDto getInfoForExercise(int exerciseNumber, String subsectionName)
     {
         List<Question> allQuestions = questionsDao.getQuestionsOnExercise(exerciseNumber, subsectionName);

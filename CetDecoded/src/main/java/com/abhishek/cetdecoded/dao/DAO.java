@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,10 +29,10 @@ public abstract class DAO<T>
         return simpleJdbcCall.execute(parameterMap);
     }
 
-    public void executeStoredProc(String storedProcName, Map<String, ?> parameterMap) throws SQLException
+    public Object executeStoredProc(String storedProcName, Map<String, ?> parameterMap) throws SQLException
     {
         SimpleJdbcCall simpleJdbcCall = getJdbcCall(storedProcName);
-        simpleJdbcCall.execute(parameterMap);
+        return ((LinkedCaseInsensitiveMap)((List<Object>)simpleJdbcCall.execute(parameterMap).get(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS)).get(0)).values().iterator().next();
     }
 
     public Map<String, Object> executeStoredProc(String storedProcName, RowMapper<T> rowMapper) throws SQLException

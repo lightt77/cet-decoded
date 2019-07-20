@@ -21,6 +21,25 @@ public class QuestionsDao extends DAO<Question>
         super(dataSource);
     }
 
+    public long getNumberOfExercises(String subsectionName)
+    {
+        try
+        {
+            return (long)executeStoredProc(StoredProcedures.GET_NUMBER_OF_EXERCISES.getValue(),
+                    new HashMap<>()
+                    {
+                        {
+                            put("p_subsection_name", subsectionName);
+                        }
+                    });
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public List<Question> getQuestionsOnExercise(int exerciseNumber, String subsectionName)
     {
         List<Question> result = new ArrayList<>();
