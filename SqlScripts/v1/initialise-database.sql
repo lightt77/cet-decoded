@@ -114,3 +114,13 @@ begin
 	select * from Subsection where parent_section_id = (Select id from Section where section_name = p_section_name);
 end$$
 DELIMITER ;
+
+DELIMITER $$
+create procedure GET_EXERCISE_INFO(in p_exercise_number int, in p_subsection_name varchar(50))
+begin
+	select * from Question inner join Prose
+		on Question.prose_id = Prose.id
+		where Question.subsection_id = (select id from Subsection where subsection_name = p_subsection_name)
+				AND Question.exercise_number=p_exercise_number;
+end$$
+DELIMITER ;
