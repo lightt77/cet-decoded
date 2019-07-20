@@ -124,3 +124,20 @@ begin
 				AND Question.exercise_number=p_exercise_number;
 end$$
 DELIMITER ;
+
+DELIMITER $$
+create procedure GET_QUESTIONS_ON_EXERCISE_AND_SECTION(in p_exercise_number int, in p_subsection_name varchar(50))
+begin
+	select * from Question 
+		where exercise_number = p_exercise_number
+        and subsection_id = (select id from Subsection where subsection_name = p_subsection_name);
+end$$
+DELIMITER ;
+
+DELIMITER $$
+create procedure GET_PROSES(in p_prose_id_set varchar(1000))
+begin
+    -- where..in() doesnt work instead of find_in_set(), see https://stackoverflow.com/questions/4155873/find-in-set-vs-in# for this 
+	select * from Prose where find_in_set(id, p_prose_id_set);
+end$$
+DELIMITER ;
