@@ -3,4 +3,5 @@ export class Constants {
     public static GET_SECTIONS_URL: string = "/sections";
     public static GET_SUBSECTIONS_LIST_URL: string = "/sections/{sectionName}/subsections";
     public static GET_EXERCISES_LIST_URL: string = "/subsections/{subsectionName}/exercises";
+    public static GET_EXERCISE_INFO: string = "/subsections/{subsectionName}/exercises/{exerciseNumber}";
 }

@@ -18,7 +18,6 @@ export default class Subsection extends Component<ISubsectionProps, ISubsectionS
   async componentDidMount(){
     let resp = await HttpService.get((Constants.HOST_NAME + Constants.GET_EXERCISES_LIST_URL)
                                         .replace("{subsectionName}", this.props.match.params.subSectionName));
-    console.log(resp);
     this.setState({exerciseCount: resp});
   }
 

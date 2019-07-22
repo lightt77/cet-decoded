@@ -13,8 +13,8 @@ function App() {
         <Navbar />
         <Route path="/" exact component={Dashboard}></Route>
         <Route path="/sections/:sectionName" exact component={Section}></Route>
-        <Route path="/sections/:sectionName/subsections/:subSectionName" component={Subsection}></Route>
-        <Route path="/sections/:sectionName/subsections/:subSectionName/exercises/:exerciseNumber" component={Exercise}></Route>
+        <Route path="/sections/:sectionName/subsections/:subSectionName" exact component={Subsection}></Route>
+        <Route path="/sections/:sectionName/subsections/:subSectionName/exercises/:exerciseNumber" exact component={Exercise}></Route>
       </div>
     </Router>
   );
