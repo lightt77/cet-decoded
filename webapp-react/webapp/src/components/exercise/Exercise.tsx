@@ -28,7 +28,6 @@ export default class Exercise extends Component<IPropType, IStateType> {
     let resp = await HttpService.get(Constants.HOST_NAME + Constants.GET_EXERCISE_INFO
                                         .replace("{subsectionName}", this.props.match.params.subSectionName)
                                         .replace("{exerciseNumber}", this.props.match.params.exerciseNumber));
-    console.log(resp);
     this.setState({exerciseInfo: resp});
   }
 
@@ -44,15 +43,18 @@ export default class Exercise extends Component<IPropType, IStateType> {
   };
 
   private getQuestions = (questions: IQuestion[]) => {
-    return questions.map(question => {
-      return (<Question question={question}></Question>);
+    return questions.map((question, index) => {
+      return (<Question question={question} id={index}></Question>);
     })
   };
 
   render() {
+    console.log("ExerciseInfo is ");
+    console.log(this.state.exerciseInfo);
     return (
-      <div>
+      <div className="container" style={{marginTop: "1rem"}}>
         {this.getProseQuestions()}
+        <br/>
         {this.getQuestions(this.state.exerciseInfo.individualQuestions)}
       </div>
     );

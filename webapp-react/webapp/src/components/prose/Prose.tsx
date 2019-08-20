@@ -9,13 +9,21 @@ interface IState{
 }
 
 export default class Prose extends Component<IProps, IState> {
+    inlineStyle = {
+        fontSize: "18px"
+    };
+    
     render() {
         return (
-            <div>
-                <div className="jumbotron">
-                    {this.props.proseBody}
-                </div>
-            </div>
-        )
+            // <div  className="container-fluid">
+              <div className="row">
+                  <div className="col-12-sm">
+                    <div style={this.inlineStyle}>
+                        <span>1.</span>
+                        {this.props.proseBody}
+                    </div>
+                  </div>
+              </div>
+        );
     }
 }
