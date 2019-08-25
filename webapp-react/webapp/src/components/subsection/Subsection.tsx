@@ -3,7 +3,7 @@ import HttpService from "../../services/http/HttpService";
 import { Constants } from "../../utilities/Constants";
 
 interface ISubsectionState{
-  exerciseCount: number;
+  exerciseList: string[];
 }
 
 interface ISubsectionProps{
@@ -12,22 +12,23 @@ interface ISubsectionProps{
 
 export default class Subsection extends Component<ISubsectionProps, ISubsectionState> {
   state = {
-    exerciseCount: 0
+    exerciseList: []
   };
 
   async componentDidMount(){
-    let resp = await HttpService.get((Constants.HOST_NAME + Constants.GET_EXERCISES_LIST_URL)
+    let resp = await HttpService.get((Constants.HOST_NAME + Constants.GET_EXERCISES_LIST)
                                         .replace("{subsectionName}", this.props.match.params.subSectionName));
-    this.setState({exerciseCount: resp});
+    this.setState({exerciseList: resp});
   }
 
   private getExerciseList() {
-    let exerciseList = [];
-    for (let i = 1; i <= this.state.exerciseCount; i++) {
-      exerciseList.push((<a className="list-group-item list-group-item-action" 
-          href={"/sections/" + this.props.match.params.sectionName + "/subsections/" + this.props.match.params.subSectionName + "/exercises/" + i}>{"Exercise "+ i}</a>))
-    }
-    return exerciseList;
+    return this.state.exerciseList
+            .map((exercise) => {
+              return (
+                <a className="list-group-item list-group-item-action"
+                    href={"/sections/" + this.props.match.params.sectionName + "/subsections/" + this.props.match.params.subSectionName + "/exercises/" + exercise}>{exercise}</a>
+              );
+            });
   }
 
   render() {

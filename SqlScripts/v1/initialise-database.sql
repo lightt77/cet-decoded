@@ -40,6 +40,15 @@ create table Prose
     prose_body varchar(4000) not null
 );
 
+create table Exercise
+(
+	id int auto_increment primary key,
+    name varchar(20) not null,
+    parent_subsection_id int not null,
+    foreign key fk_subsection_id(parent_subsection_id)
+    references Subsection(id)
+);
+
 create table Question
 (
 	id int auto_increment primary key,
@@ -48,12 +57,11 @@ create table Question
     type int not null default 0,
     options varchar(1000),
     answer varchar(6) not null,
-    subsection_id int not null,
-    exercise_number int,
+    exercise_id int,                            -- for miscellaneous questions, keep this blank
     expected_time_to_answer int not null,
     solution varchar(3000) default null,
-    foreign key fk_subsection_id(subsection_id)
-    references Subsection(id),
+    foreign key fk_exercise_id(exercise_id)
+    references Exercise(id),
     foreign key fk_prose_id(prose_id)
     references Prose(id)
 );
@@ -90,6 +98,13 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
+LOAD DATA LOCAL INFILE '/home/lightt77/abhishek/coding/open source/myprojects/cet-decoded/SqlScripts/v1/csvs/Exercise.csv' 
+INTO TABLE Exercise
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
 LOAD DATA LOCAL INFILE '/home/lightt77/abhishek/coding/open source/myprojects/cet-decoded/SqlScripts/v1/csvs/Question.csv' 
 INTO TABLE Question
 FIELDS TERMINATED BY ',' 
@@ -116,35 +131,25 @@ end$$
 DELIMITER ;
 
 DELIMITER $$
-create procedure GET_EXERCISE_INFO(in p_exercise_number int, in p_subsection_name varchar(50))
+create procedure GET_EXERCISES_ON_SUBSECTION(in p_subsection_name varchar(50))
 begin
-	select * from Question inner join Prose
-		on Question.prose_id = Prose.id
-		where Question.subsection_id = (select id from Subsection where subsection_name = p_subsection_name)
-				AND Question.exercise_number=p_exercise_number;
+    select * from Exercise where parent_subsection_id = (Select id from Subsection where subsection_name=p_subsection_name);
 end$$
 DELIMITER ;
 
 DELIMITER $$
-create procedure GET_QUESTIONS_ON_EXERCISE_AND_SECTION(in p_exercise_number int, in p_subsection_name varchar(50))
+create procedure GET_EXERCISE_INFO(in p_exercise_name varchar(50), in p_subsection_name varchar(50))
 begin
 	select * from Question 
-		where exercise_number = p_exercise_number
-        and subsection_id = (select id from Subsection where subsection_name = p_subsection_name);
-end$$
-DELIMITER ;
-
-DELIMITER $$
-create procedure GET_PROSES(in p_prose_id_set varchar(1000))
-begin
-    -- where..in() doesnt work instead of find_in_set(), see https://stackoverflow.com/questions/4155873/find-in-set-vs-in# for this 
-	select * from Prose where find_in_set(id, p_prose_id_set);
-end$$
-DELIMITER ;
-
-DELIMITER $$
-create procedure GET_NUMBER_OF_EXERCISES(in p_subsection_name varchar(50))
-begin
-	select count(distinct exercise_number) from Question where subsection_id = (Select id from Subsection where subsection_name = p_subsection_name);
+        where exercise_id = (select id from Exercise 
+			where name = p_exercise_name 
+            and parent_subsection_id = (select id from Subsection 
+				where subsection_name = p_subsection_name));
+	select * from Prose 
+		where id in (Select distinct(prose_id) from Question 
+			where exercise_id = (select id from Exercise
+				where name = p_exercise_name 
+                and parent_subsection_id = (select id from Subsection 
+					where subsection_name = p_subsection_name)));
 end$$
 DELIMITER ;
