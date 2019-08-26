@@ -26,7 +26,7 @@ export default class Navbar extends Component<any, IState> {
   };
 
   async componentDidMount() {
-    let resp = await httpService.get(Constants.HOST_NAME + Constants.GET_SECTIONS_URL);
+    let resp = await httpService.get(Constants.HOST_NAME + Constants.GET_SECTIONS);
     this.setState({sectionsList: resp});
   }
 

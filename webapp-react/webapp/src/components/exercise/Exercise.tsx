@@ -32,10 +32,10 @@ export default class Exercise extends Component<IPropType, IStateType> {
   }
 
   private getProseQuestions = () => {
-    return this.state.exerciseInfo.proseQuestionSets.map(proseQuestionSet => {
+    return this.state.exerciseInfo.proseQuestionSets.map((proseQuestionSet,index) => {
       return (
         <div>
-          <Prose proseBody={(proseQuestionSet as any).prose.proseBody}></Prose>
+          <Prose proseBody={(proseQuestionSet as any).prose.proseBody} id={index+1}></Prose>
           <div>{this.getQuestions((proseQuestionSet as any).questionsList)}</div>
         </div>
       );
@@ -44,13 +44,11 @@ export default class Exercise extends Component<IPropType, IStateType> {
 
   private getQuestions = (questions: IQuestion[]) => {
     return questions.map((question, index) => {
-      return (<Question question={question} id={index}></Question>);
+      return (<Question question={question} id={index+1}></Question>);
     })
   };
 
   render() {
-    console.log("ExerciseInfo is ");
-    console.log(this.state.exerciseInfo);
     return (
       <div className="container" style={{marginTop: "1rem"}}>
         {this.getProseQuestions()}

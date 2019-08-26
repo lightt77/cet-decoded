@@ -22,7 +22,7 @@ export default class Section extends Component<ISectionProp, ISectionState> {
   };
 
   async componentDidMount() {
-    let resp = await HttpService.get((Constants.HOST_NAME + Constants.GET_SUBSECTIONS_LIST_URL)
+    let resp = await HttpService.get((Constants.HOST_NAME + Constants.GET_SUBSECTIONS_LIST)
                                         .replace("{sectionName}", this.props.match.params.sectionName));
     this.setState({subSectionsList: resp});
   }
