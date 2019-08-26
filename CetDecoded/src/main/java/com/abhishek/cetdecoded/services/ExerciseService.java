@@ -6,6 +6,7 @@ import com.abhishek.cetdecoded.dto.ProseQuestionsSet;
 import com.abhishek.cetdecoded.models.Exercise;
 import com.abhishek.cetdecoded.models.Prose;
 import com.abhishek.cetdecoded.models.Question;
+import com.abhishek.cetdecoded.utilities.enums.QuestionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,13 @@ public class ExerciseService
         Map.Entry<ArrayList<Question>, ArrayList<Prose>> exerciseInfoFromDB = exerciseDao.getExerciseInfo(exerciseName, subsectionName);
         List<Question> questionList = exerciseInfoFromDB.getKey();
         List<Prose> proseList = exerciseInfoFromDB.getValue();
-
         ExerciseInfoDto exerciseInfoDto = new ExerciseInfoDto();
-        exerciseInfoDto.setIndividualQuestions(questionList.stream().filter(question -> question.getType() == 0).collect(Collectors.toList()));
-        exerciseInfoDto.setProseQuestionSets(proseList.stream().map(prose ->
-            new ProseQuestionsSet(prose, questionList.stream().filter(question -> question.getType() != 0 && question.getProseId() == prose.getId()).collect(Collectors.toList()))
-        ).collect(Collectors.toList()));
-
+        exerciseInfoDto.setIndividualQuestions(questionList.stream()
+                .filter(question -> question.getType() == QuestionType.INDIVIDUAL.getValue()).collect(Collectors.toList()));
+        exerciseInfoDto.setProseQuestionSets(proseList.stream()
+                .filter(prose -> questionList.stream().anyMatch(question -> question.getProseId() == prose.getId() && question.getType() == QuestionType.PROSE.getValue()))
+                .map(prose -> new ProseQuestionsSet(prose, questionList.stream().filter(question -> question.getType() == QuestionType.PROSE.getValue() && question.getProseId() == prose.getId()).collect(Collectors.toList())))
+                .collect(Collectors.toList()));
         return exerciseInfoDto;
     }
 }
