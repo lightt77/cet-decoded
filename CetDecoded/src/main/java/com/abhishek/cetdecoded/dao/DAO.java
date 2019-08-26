@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class DAO<T>
 {
@@ -25,24 +27,27 @@ public abstract class DAO<T>
     public Map<String, Object> executeStoredProc(String storedProcName, Map<String, ?> parameterMap, RowMapper<T> rowMapper)
     {
         SimpleJdbcCall simpleJdbcCall = getJdbcCall(storedProcName);
-        simpleJdbcCall.returningResultSet(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS, rowMapper);
+        simpleJdbcCall.returningResultSet(Constants.DEFAULT_RESULT_SET_KEY_PREFIX_FOR_STORED_PROCS + "1", rowMapper);
         return simpleJdbcCall.execute(parameterMap);
-    }
-
-    public Object executeStoredProc(String storedProcName, Map<String, ?> parameterMap) throws SQLException
-    {
-        SimpleJdbcCall simpleJdbcCall = getJdbcCall(storedProcName);
-        return ((LinkedCaseInsensitiveMap)((List<Object>)simpleJdbcCall.execute(parameterMap).get(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS)).get(0)).values().iterator().next();
     }
 
     public Map<String, Object> executeStoredProc(String storedProcName, RowMapper<T> rowMapper) throws SQLException
     {
         SimpleJdbcCall simpleJdbcCall = getJdbcCall(storedProcName);
-        simpleJdbcCall.returningResultSet(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS, rowMapper);
+        simpleJdbcCall.returningResultSet(Constants.DEFAULT_RESULT_SET_KEY_PREFIX_FOR_STORED_PROCS + "1", rowMapper);
         return simpleJdbcCall.execute();
     }
 
-    private SimpleJdbcCall getJdbcCall(String storedProcName)
+    public List<Object> executeStoredProcWithMultipleResultSets(String storedProcName, Map<String, ?> parameterMap, List<String> resultSetKeys, List<RowMapper> rowMappers)
+    {
+        SimpleJdbcCall simpleJdbcCall = getJdbcCall(storedProcName);
+        IntStream.range(0, rowMappers.size())
+                .forEach(index -> simpleJdbcCall.returningResultSet(resultSetKeys.get(index), rowMappers.get(index)));
+        Map<String, Object> spResponseMap = simpleJdbcCall.execute(parameterMap);
+        return resultSetKeys.stream().map(spResponseMap::get).collect(Collectors.toList());
+    }
+
+    public SimpleJdbcCall getJdbcCall(String storedProcName)
     {
         // create new SimpleJdbcCall object for every stored-proc call to avoid metadata-cache clash issues among stored procs
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
@@ -53,10 +58,11 @@ public abstract class DAO<T>
     public List<T> mapToList(Map<String, Object> resultMap) throws SQLException
     {
         List<T> resultList = new ArrayList<>();
-        if(!resultMap.containsKey(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS))
+        if (!resultMap.containsKey(Constants.DEFAULT_RESULT_SET_KEY_PREFIX_FOR_STORED_PROCS + "1"))
             throw new SQLException("result key not found");
         // TODO: deal with unsafe type-cast warning
-        resultList.addAll((List<T>)resultMap.get(Constants.DEFAULT_RESULT_SET_KEY_FOR_STORED_PROCS));
+        if(resultMap.get(Constants.DEFAULT_RESULT_SET_KEY_PREFIX_FOR_STORED_PROCS + "1") instanceof List)
+            resultList.addAll((List<T>)resultMap.get(Constants.DEFAULT_RESULT_SET_KEY_PREFIX_FOR_STORED_PROCS + "1"));
         return resultList;
     }
 }
