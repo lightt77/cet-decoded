@@ -15,7 +15,7 @@ export default class Prose extends Component<IProps, IState> {
     };
 
     private getProseBody = (rawProseBody: string) => {
-        
+        return rawProseBody.split('\n').map(x => <p>{x}</p>);
     };
     
     render() {
@@ -25,7 +25,7 @@ export default class Prose extends Component<IProps, IState> {
                   <div className="col-12-sm">
                     <div style={this.inlineStyle}>
                         <span>{this.props.id}.&nbsp;&nbsp;</span>
-                        {this.props.proseBody}
+                        {this.getProseBody(this.props.proseBody)}
                     </div>
                   </div>
               </div>
