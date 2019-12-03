@@ -4,6 +4,7 @@ import './index.css';
 import './bootstrap/bootstrap-flatly.css';
 import './bootstrap/bootstrap-flatly-override.css';
 import './components/navbar/navbar.css';
+import './components/dashboard/dashboard.css';
 import App from './App.tsx';
 import * as serviceWorker from './serviceWorker';
 

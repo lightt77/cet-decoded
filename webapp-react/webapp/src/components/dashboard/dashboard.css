@@ -1,0 +1,19 @@
+.dashboardCards {
+    height: 8rem;
+    padding: 0;
+}
+
+.dashboardCards :hover {
+    border-color: #ecf0f1;
+    border-style: solid;
+    background-color: #ecf0f1;
+}
+
+.dashboardCards .card-body h5 {
+    text-align: center;
+    margin-top: 1.9rem;
+}
+
+.jumbotron {
+    padding: 0;
+}
