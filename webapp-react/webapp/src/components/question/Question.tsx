@@ -28,7 +28,7 @@ export default class Question extends Component<IProps, IState> {
                     <span className="card-title">{this.props.question.statement}</span>
                     <ul className="list-group">
                         {this.getOptions(this.props.question)}
-                        <button className="btn btn-info col-2" data-toggle="collapse" data-target={"#id"+this.props.id.toString()}>Show Solution</button>
+                        <button className="btn btn-success col-2" data-toggle="collapse" data-target={"#id"+this.props.id.toString()}>Show Solution</button>
                     </ul>
                     <div className="collapse" id={"id"+this.props.id.toString()}>
                         <p>{this.props.question.solution}</p>

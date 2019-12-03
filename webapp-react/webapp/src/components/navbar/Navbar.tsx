@@ -33,13 +33,13 @@ export default class Navbar extends Component<any, IState> {
   public render() {
     return (
       <div className="Navbar">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
           <a id="navbarBrandName" className="navbar-brand" href="/">ContentCrack</a>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
   
-          <div className="collapse navbar-collapse" id="navbarColor03">
+          <div className="collapse navbar-collapse" id="navbarColor01">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item">
                 <a className="nav-link" href="/">Home</a>
@@ -49,7 +49,7 @@ export default class Navbar extends Component<any, IState> {
                   Sections
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  {this.getSections()}
+                    {this.getSections()}
                 </div>
               </li>
               <li className="nav-item">
@@ -58,11 +58,11 @@ export default class Navbar extends Component<any, IState> {
               <li className="nav-item">
                 <a className="nav-link disabled" href="#">Tests</a>
               </li>
-              
+  
             </ul>
           </div>
         </nav>
-      </div>
-    );  
+        </div>
+      );
   }
 }

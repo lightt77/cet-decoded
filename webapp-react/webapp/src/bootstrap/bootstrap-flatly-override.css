@@ -7,5 +7,10 @@
 }
 
 .Navbar{
-    margin-bottom: 0.2rem
+    /* margin-bottom: 0.2rem */
+}
+
+.list-group-item-action:hover {
+    background-color: #18BC9C;
+    color: #fff;
 }

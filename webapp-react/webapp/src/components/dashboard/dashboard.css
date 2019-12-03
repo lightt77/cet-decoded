@@ -6,7 +6,9 @@
 .dashboardCards :hover {
     border-color: #ecf0f1;
     border-style: solid;
-    background-color: #ecf0f1;
+    /* background-color: #ecf0f1; */
+    background-color: #18BC9C;
+    color: #fff
 }
 
 .dashboardCards .card-body h5 {
